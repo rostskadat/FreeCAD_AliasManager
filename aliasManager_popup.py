@@ -44,6 +44,7 @@ __Requires__ = "FreeCAD 0.16"
 from PySide import QtGui, QtCore
 from FreeCAD import Gui
 import os
+import re
 import string
 App = FreeCAD
 Gui = FreeCADGui
@@ -108,8 +109,10 @@ class p():
                 for i in range(row_from,row_to+1):
                     cell_from = 'A' + str(i)
                     cell_to = str(column_from) + str(i)
+                    alias = App.ActiveDocument.Spreadsheet.getContents(cell_from)
+                    alias = re.sub(r'(?is)[^a-zA-Z0-9_]+', '', alias)
                     App.ActiveDocument.Spreadsheet.setAlias(cell_to, '')
-                    App.ActiveDocument.Spreadsheet.setAlias(cell_to, App.ActiveDocument.Spreadsheet.getContents(cell_from))
+                    App.ActiveDocument.Spreadsheet.setAlias(cell_to, alias)
                     App.ActiveDocument.recompute()
 
                 FreeCAD.Console.PrintMessage("\nAliases set\n")
@@ -133,9 +136,11 @@ class p():
                     cell_reference = 'A'+ str(i)                        
                     cell_from = column_from + str(i)
                     cell_to = column_to + str(i)
+                    alias = App.ActiveDocument.Spreadsheet.getContents(cell_reference)
+                    alias = re.sub(r'(?is)[^a-zA-Z0-9_]+', '', alias)
                     App.ActiveDocument.Spreadsheet.setAlias(cell_from, '')
                     App.ActiveDocument.recompute()
-                    App.ActiveDocument.Spreadsheet.setAlias(cell_to, App.ActiveDocument.Spreadsheet.getContents(cell_reference))
+                    App.ActiveDocument.Spreadsheet.setAlias(cell_to, alias)
                     App.ActiveDocument.recompute()
                 FreeCAD.Console.PrintMessage("\nAliases moved\n")
 
