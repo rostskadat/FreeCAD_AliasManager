@@ -169,9 +169,11 @@ class p():
                         cell_reference = 'A' + str(i)
                         cell_from = str(fam_range[index-1]) + str(i)
                         cell_to = str(fam_range[index]) + str(i)
+                        alias = App.ActiveDocument.Spreadsheet.getContents(cell_reference)
+                        alias = re.sub(r'(?is)[^a-zA-Z0-9_]+', '', alias)
                         App.ActiveDocument.Spreadsheet.setAlias(cell_from, '')
                         App.ActiveDocument.recompute()
-                        App.ActiveDocument.Spreadsheet.setAlias(cell_to, App.ActiveDocument.Spreadsheet.getContents(cell_reference))
+                        App.ActiveDocument.Spreadsheet.setAlias(cell_to, alias)
                         App.ActiveDocument.recompute()
                         sfx = str(fam_range[index]) + '1'
 
